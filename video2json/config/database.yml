@@ -14,8 +14,8 @@
 development:
   adapter: mysql
   database: video2json_development
-  username: pentti
-  password: spena
+  username: 
+  password: 
   socket: /var/run/mysqld/mysqld.sock
 
 # Warning: The database defined as 'test' will be erased and
@@ -24,13 +24,13 @@ development:
 test:
   adapter: mysql
   database: video2json_test
-  username: pentti
-  password: spena
+  username: 
+  password: 
   socket: /var/run/mysqld/mysqld.sock
 
 production:
   adapter: mysql
   database: video2json_production
-  username: pentti
-  password: spena
+  username: 
+  password: 
   socket: /var/run/mysqld/mysqld.sock
