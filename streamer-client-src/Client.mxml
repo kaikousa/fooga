@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    viewSourceURL="src/HelloWorld/index.html"
+    horizontalAlign="center" verticalAlign="middle" 
+    width="640" height="360" styleName="fscBg">
+    
+    <mx:Style>
+    	.fscBg{
+    		background-color: #909090 ;
+    	}
+    </mx:Style>
+    
+    <mx:Script>
+    	<![CDATA[
+    		import flash.events.MouseEvent;
+    		
+    		private function clickHandler(event:MouseEvent):void{
+    			console.text += "\nclick";
+    		}
+    	]]>
+    </mx:Script>
+    
+    <mx:Panel 
+        paddingTop="10" 
+        paddingBottom="10" 
+        paddingLeft="10" 
+        paddingRight="10"
+        title="Fooga Streamer Client">
+
+        <mx:TextArea id="console" width="320" height="180" click="clickHandler(event);"/>
+    </mx:Panel>
+</mx:Application>
