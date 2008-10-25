@@ -1,0 +1,18 @@
+<HTml>
+  <body>
+    <% i = 0 %>
+    <table>
+      <% @results.each do |f| %>
+      <tr>
+        <td>
+          <%= f %>
+        </td>
+        <td>
+          <%= @videos[i] %>
+        </td>
+      </tr>
+      <% i = i + 1 %>
+      <% end %>
+    </table>
+  </body>
+</html>

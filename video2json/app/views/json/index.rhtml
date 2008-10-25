@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>
+      Testi
+    </title>
+  </head>
+  <body>
+    <%= form_tag (:action => "list") %>   
+    <div>
+      <label for="path">Search path: </label>
+      <%= text_field_tag 'path', 'Insert search path here', :size => 100 %>
+    </div>
+    <div><%= submit_tag 'Find media' %></div>
+  </body>
+</html>
