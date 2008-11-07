@@ -67,7 +67,11 @@ FoogaUtils.TimeHelper = {
       }
     }
     return number;
-  }
+  },
+
+  timeToString: function(h, m, s, ms) {
+    return h + ":" + m + ":" + s + ":" + ms;
+  } 
 };
 
 FoogaUtils.TrimManager = {

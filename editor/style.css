@@ -157,9 +157,20 @@ div.library_wrapper {
   list-style-position: outside;
 }
 
-div.library_clip {
-  height: 20px;
-  background-color: #ddd;
+div.library_clip_video {
+  height: 30px;
+  background-color: #00A6CC;
   margin-bottom: 3px;
   font-size: 10px;
+  border-bottom: 1px solid black;
+  padding-left: 5px;
+}
+
+div.library_clip_audio {
+  height: 30px;
+  background-color: #4CDFFF;
+  margin-bottom: 3px;
+  font-size: 10px;
+  border-bottom: 1px solid black;
+  padding-left: 5px;
 }

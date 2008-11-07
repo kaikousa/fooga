@@ -1257,7 +1257,10 @@ var LibraryClipController = Class.create(Controller, {
     $super(View, Model, parent);
     this.name = "LibraryController";
     var element = this.View.createElement(this);
-    element.update(this.Model.data.name);
+    element.update(this.Model.data.name + "<br />" + 
+      this.Model.data.type + "clip " + 
+      FoogaUtils.TimeHelper.timeToString(this.Model.data.dur_h, this.Model.data.dur_m, this.Model.data.dur_s, this.Model.data.dur_ms)
+    );
   }
 });
 
@@ -1265,9 +1268,10 @@ var LibraryClipView = Class.create(View, {
   initialize: function() {
   },
   createElement: function(Controller) {
+    var Model = Controller.Model;
     var element = new Element('div', {
       id: 'library_clip_' + Math.floor((Math.random() * 100000)),
-      className: 'library_clip'
+      className: 'library_clip_' + Model.data.type
     });
     Controller.getParent().View.element.appendChild(element);
     return element;
