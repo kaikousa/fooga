@@ -1,0 +1,245 @@
+<html>
+
+<head>
+
+<title>Fooga Editor</title>
+<link type="text/css" rel="Stylesheet" media="screen" href="style.css" />
+<!--<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script> -->
+<script src="scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="scriptaculous/scriptaculous.js" type="text/javascript"> </script>
+<script src="timeHelper.js" type="text/javascript"> </script>
+<script src="pac.js" type="text/javascript"> </script>
+
+</head>
+
+<body>
+<div id="container" style=""></div>
+<div id="container2" style=""></div>
+
+
+</body>
+
+<script type="text/javascript">
+//Start timing. Timing ends at the end of Fooga.launch();
+console.time("Total init time: ");
+
+
+var library = {
+  "media_library": 
+    [
+        {
+        "playable_filename":"userdata/leffa.flv",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"elokuva",
+        "type":"video",
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "filename":"userdata/leffa.avi"
+        },
+        {
+        "playable_filename":"userdata/aani.mp3",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"Naurua 2",
+        "type":"audio",
+        "dur_h":0,
+        "dur_m":0,
+        "dur_s":3,
+        "dur_ms":0,
+        "filename":"userdata/aani.mp3"
+        },
+        {
+        "playable_filename":"userdata/leffa.flv",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"Heh, joo",
+        "type":"video",
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "filename":"userdata/leffa.avi"
+        },
+        {
+        "playable_filename":"userdata/aani.mp3",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"Pikku kakkosen posti",
+        "type":"audio",
+        "dur_h":0,
+        "dur_m":0,
+        "dur_s":3,
+        "dur_ms":0,
+        "filename":"userdata/aani.mp3"
+        },
+        {
+        "playable_filename":"userdata/leffa.flv",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"Jee jee jerri kotton",
+        "type":"video",
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "filename":"userdata/leffa.avi"
+        },
+        {
+        "playable_filename":"userdata/aani.mp3",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"Moron moo",
+        "type":"audio",
+        "dur_h":0,
+        "dur_m":0,
+        "dur_s":3,
+        "dur_ms":0,
+        "filename":"userdata/aani.mp3"
+        },
+
+    ]
+};
+var json = {
+
+
+  "video_timelines":
+    [
+      [
+        {
+        "playable_filename":"userdata/leffa.flv",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"elokuva1.flv",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":20,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":1,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/leffa.avi"
+        }
+      ]
+    ],
+  "audio_timelines":
+    [
+      [
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"heavy.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":7,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":1,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        },
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"lastenlaulu.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":12,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":13,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        }
+      ],
+      [
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"slovari.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":10,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":3,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        },
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"rokki.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":10,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":23,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        }
+      ]
+    ]
+  }
+
+var data = {"timelines": json, "library": library};
+var player = {player: "Player"};
+var fooga = new Fooga($('container'), new MainController(new MainView(), new MainModel(data, player), null));
+fooga.launch();
+
+//var fooga2 = new Fooga($('container2'), new MainController(new MainView, new MainModel(json), null));
+//fooga2.launch();
+</script>
+</html>

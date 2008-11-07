@@ -1,0 +1,25 @@
+Fooga editor TODO
+
+  VIDEO
+    -User should be able to mute whole timelines
+    -Make videoclips work
+      -Must implemet some sort of snap for videoclips to cleanly join 
+      -Add mute-button to videoclips
+
+  AUDIO
+    -User should be able to mute whole timelines
+
+  GENERAL
+    -Media library
+    -Some sort of meter to show time: |1min-------|2min--------|3min -> |1sec------|2sec------|3sec
+    -Toolbar for timelines:
+      Splice-tool
+      Select-tool
+      Delete clip
+    -General toolbar:
+      Add new timeline
+      Delete timeline
+      Cut/Copy/paste clips
+      
+
+      
