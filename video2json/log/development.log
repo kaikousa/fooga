@@ -4300,3 +4300,41 @@ c2h7AAY6CkB1c2VkewA=--91757c013282ff09cbae61f6d236fd0c6271951d
   Parameters: {"authenticity_token"=>"bbc9a416a8f7f4d4aa577e0b9a3eafe856efaa73", "action"=>"list", "controller"=>"json"}
 Rendering json/list
 Completed in 0.59867 (1 reqs/sec) | Rendering: 0.00244 (0%) | DB: 0.00000 (0%) | 200 OK [http://localhost/json/list]
+
+
+Processing JsonController#index (for 127.0.0.1 at 2008-11-14 18:28:55) [GET]
+  Session ID: f855911bbf39e4519e80ecffc18cfbab
+  Parameters: {"action"=>"index", "controller"=>"json"}
+  [4;36;1mSQL (0.000444)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.000365)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+Rendering json/index
+Completed in 0.01820 (54 reqs/sec) | Rendering: 0.00946 (51%) | DB: 0.00081 (4%) | 200 OK [http://localhost/json/]
+
+
+Processing JsonController#list (for 127.0.0.1 at 2008-11-14 18:28:57) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlODM3ZjU3NjY1MDc1MTRhZGQxY2Q1ODdhYzc3MWE2
+NDciCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh
+c2h7AAY6CkB1c2VkewA=--dd26e71a411a74936df7cab05da1d8737347e8e2
+  Parameters: {"authenticity_token"=>"479bdd516c6d2300d898df5c2e36b934874d4d54", "action"=>"list", "controller"=>"json"}
+Rendering json/list
+Completed in 1.39417 (0 reqs/sec) | Rendering: 0.00572 (0%) | DB: 0.00000 (0%) | 200 OK [http://localhost/json/list]
+
+
+Processing JsonController#index (for 127.0.0.1 at 2008-11-14 18:38:26) [GET]
+  Session ID: BAh7BzoMY3NyZl9pZCIlODM3ZjU3NjY1MDc1MTRhZGQxY2Q1ODdhYzc3MWE2
+NDciCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh
+c2h7AAY6CkB1c2VkewA=--dd26e71a411a74936df7cab05da1d8737347e8e2
+  Parameters: {"action"=>"index", "controller"=>"json"}
+  [4;36;1mSQL (0.000301)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.000247)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+Rendering json/index
+Completed in 0.01240 (80 reqs/sec) | Rendering: 0.00648 (52%) | DB: 0.00055 (4%) | 200 OK [http://localhost/json]
+
+
+Processing JsonController#list (for 127.0.0.1 at 2008-11-14 18:38:28) [POST]
+  Session ID: BAh7BzoMY3NyZl9pZCIlODM3ZjU3NjY1MDc1MTRhZGQxY2Q1ODdhYzc3MWE2
+NDciCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhh
+c2h7AAY6CkB1c2VkewA=--dd26e71a411a74936df7cab05da1d8737347e8e2
+  Parameters: {"authenticity_token"=>"479bdd516c6d2300d898df5c2e36b934874d4d54", "action"=>"list", "controller"=>"json"}
+Rendering json/list
+Completed in 0.63200 (1 reqs/sec) | Rendering: 0.00558 (0%) | DB: 0.00000 (0%) | 200 OK [http://localhost/json/list]
