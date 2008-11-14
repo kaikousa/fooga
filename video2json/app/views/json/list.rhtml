@@ -1,17 +1,27 @@
 <HTml>
   <body>
-    <% i = 0 %>
     <table>
-      <% @results.each do |f| %>
-      <tr>
-        <td>
-          <%= f %>
-        </td>
-        <td>
-          <%= @videos[i] %>
-        </td>
-      </tr>
-      <% i = i + 1 %>
+      <% @videos.each do |video| %>
+        <tr>
+          <td>
+          <%= video["res_w"] %>
+          </td>
+          <td>
+          <%= video["res_h"] %>
+          </td>
+          <td>
+          <%= video["dur_h"] %>
+          </td>
+          <td>
+          <%= video["dur_m"] %>
+          </td>
+          <td>
+          <%= video["dur_s"] %>
+          </td>
+          <td>
+        <%= video["dur_ms"] %>
+          </td>
+        </tr>
       <% end %>
     </table>
   </body>
