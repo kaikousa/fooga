@@ -1,6 +1,7 @@
 #video file path
 
-path: /home/lana/videos/
+video_path: /home/lana/videos/
+audio_path: /home/lana/audio/
 
 #File info cmd
 

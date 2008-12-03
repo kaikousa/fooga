@@ -24,7 +24,7 @@ console.time("Total init time: ");
 var library = {
   "media_library": 
     [
-    <% @videos.each do |v| %>
+    <% @media.each do |v| %>
         {
         "playable_filename":"<%= v["playable_filename"] %>",
         "thumbnail_image":"",
