@@ -55,6 +55,10 @@ class JsonController < ApplicationController
         end
       end
     end
+    dur_h = 0
+    dur_m = 0
+    dur_s = 0
+    dur_ms = 0
     files = Dir.entries(settings["audio_path"])
     for file in files
       if ! File.directory?(settings["audio_path"] + file) 
@@ -63,16 +67,12 @@ class JsonController < ApplicationController
         filename = settings["audio_path"] + file
         name = File.basename(settings["audio_path"] + file , File.extname(settings["audio_path"] + file))
         type = "audio"
-        dur_h = 0
-        dur_m = 0
-        dur_s = 0
-        dur_ms = 0
 
         cmdi = settings["ffmpeg_info"]
         cmdi = cmdi.sub( "<filename_withext>", settings["audio_path"] + file )
         IO.popen(cmdi) do |pipe|
           pipe.each("\n") do |line|
-            #Check the duration of the video file
+            puts line
             if line =~ /Duration: (\d+):(\d+):(\d+).(\d+)/
               dur_h = $1.to_i
               dur_m = $2.to_i

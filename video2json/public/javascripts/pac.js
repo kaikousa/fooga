@@ -505,56 +505,63 @@ var ClipModel = Class.create(Model, {
   initialize: function($super, type, data) {
     $super(data);
     this.data.type = type;
-    with(data) {
-      this.data.dur_h = dur_h;
-      this.data.dur_m = dur_m;
-      this.data.dur_s = dur_s;
-      this.data.dur_ms = dur_ms;
+    this.data.dur_h = data.dur_h;
+    this.data.dur_m = data.dur_m;
+    this.data.dur_s = data.dur_s;
+    this.data.dur_ms = data.dur_ms;
 
-      this.data.in_h = in_h;
-      this.data.in_m = in_m;
-      this.data.in_s = in_s;
+    if(data.in_h != undefined) {
+      this.data.in_h = data.in_h;
+      this.data.in_m = data.in_m;
+      this.data.in_s = data.in_s;
+      this.data.in_ms = data.in_ms;
 
-      this.data.out_h = out_h;
-      this.data.out_m = out_m;
-      this.data.out_s = out_s;
+      this.data.out_h = data.out_h;
+      this.data.out_m = data.out_m;
+      this.data.out_s = data.out_s;
+      this.data.out_ms = data.out_ms;
+    }
+    else {
+      this.data.in_h = 0;
+      this.data.in_m = 0;
+      this.data.in_s = 0;
+      this.data.in_ms = 0;
+
+      this.data.out_h = data.dur_h;
+      this.data.out_m = data.dur_m;
+      this.data.out_s = data.dur_s;
+      this.data.out_ms = data.dur_ms;
+    }
+    
+    this.data.duration = FoogaUtils.TimeHelper.timeToMilliseconds(
+      data.dur_h, 
+      data.dur_m,
+      data.dur_s, 
+      data.dur_ms);
+
+    if(data.type == "audio" || data.type == "video" && data.in_h != undefined) {
+      this.data.offset_h = data.offset_h;
+      this.data.offset_m = data.offset_m;
+      this.data.offset_s = data.offset_s;
+      this.data.offset_ms = data.offset_ms;
+
+      this.data.offset = FoogaUtils.TimeHelper.timeToMilliseconds(
+        data.offset_h, 
+        data.offset_m, 
+        data.offset_s, 
+        data.offset_ms);
       
-      this.data.duration = FoogaUtils.TimeHelper.timeToMilliseconds(dur_h, dur_m, dur_s, dur_ms);
+      this.data.inpoint = FoogaUtils.TimeHelper.timeToMilliseconds(
+        data.in_h, 
+        data.in_m, 
+        data.in_s, 
+        data.in_ms);
 
-      if(type == "audio" || type == "video") {
-
-        this.data.in_ms = in_ms;
-
-        this.data.out_ms = out_ms;
-
-        this.data.offset_h = offset_h;
-        this.data.offset_m = offset_m;
-        this.data.offset_s = offset_s;
-        this.data.offset_ms = offset_ms;
-
-        this.data.offset = FoogaUtils.TimeHelper.timeToMilliseconds(offset_h, offset_m, offset_s, offset_ms);
-        this.data.inpoint = FoogaUtils.TimeHelper.timeToMilliseconds(in_h, in_m, in_s, in_ms);
-        this.data.outpoint = FoogaUtils.TimeHelper.timeToMilliseconds(out_h, out_m, out_s, out_ms);
-      }
-      /*else if(type == "video") {
-        this.data.in_f = in_f;
-        this.data.out_f = out_f;
-        this.data.place = place;
-
-        
-        this.data.fps = FoogaUtils.settings.fps;
-
-        var offset = FoogaUtils.TimeHelper.millisecondsToTimeWithFps(place * 1000, fps);
-        this.data.offset_h = offset.h;
-        this.data.offset_m = offset.m;
-        this.data.offset_s = offset.s;
-        this.data.offset_f = offset.f;
-        this.data.offset = FoogaUtils.TimeHelper.timeToMillisecondsWithFps(this.data.offset_h, this.data.offset_m, this.data.offset_s, this.data.offset_f, this.data.fps);
-
-        this.data.inpoint = FoogaUtils.TimeHelper.timeToMillisecondsWithFps(in_h, in_m, in_s, in_f, fps);
-        this.data.outpoint = FoogaUtils.TimeHelper.timeToMillisecondsWithFps(out_h, out_m, out_s, out_f, fps);
-
-      }*/
+      this.data.outpoint = FoogaUtils.TimeHelper.timeToMilliseconds(
+        data.out_h, 
+        data.out_m, 
+        data.out_s, 
+        data.out_ms);
     }
   }
 
@@ -600,8 +607,12 @@ var ClipView = Class.create(View, {
 
     element.setStyle({width: Controller.getWidthInPx() + "px"});
     Controller.registerElement(element);
-    Controller.getParentByName('TimelineController').getElement().appendChild(element);
-
+    if(Controller.getParentByName('TimelineController') != undefined){
+      Controller.getParentByName('TimelineController').getElement().appendChild(element);
+    }
+    else {
+      document.body.appendChild(element);
+    }
   },
 
   drawTrim: function(screenX, direction, duration, inpoint, outpoint, zoomLevel) {
@@ -661,11 +672,22 @@ var ClipController = Class.create(Controller, {
     this.setAsDraggable();
     this.initEventHandlers();
     var zoomLevel = this.getMainController().getZoomLevel();
-    this.setStartpoint(this.getPxOffset(zoomLevel), zoomLevel, this.getParent().getScrollLeft());
+    if(this.getParentByName('TimelineController') != undefined){
+      this.setStartpoint(this.getPxOffset(zoomLevel), zoomLevel, this.getParent().getScrollLeft());
+    }
+  },
+
+  delete: function() {
+    this.Model.draggable.destroy();
+    this.getElement().stopObserving();
+    this.getElement().down().next('.rightHandle').stopObserving();
+    this.getElement().down().next('.leftHandle').stopObserving();
+    this.View.element.remove();
+
   },
 
   setAsDraggable: function() {
-    new FoogaDraggable(this.View.element, {}, this);
+    this.Model.draggable = new FoogaDraggable(this.View.element, {}, this);
   },
 
   draw: function() {
@@ -708,6 +730,10 @@ var ClipController = Class.create(Controller, {
 	
   },
 
+  removeEventHandlers: function() {
+    var element = this.getElement();
+    element.stopObserving();
+  },
 
   initEventHandlers: function() {
     var element = this.getElement();
@@ -879,8 +905,12 @@ var DragObserver = Class.create({
 	  console.log("onEnd");
     if(draggable.element.className == 'audioClip' || draggable.element.className == 'videoClip') {
       var current_timeline_element = draggable.Controller.getCurrentTimeline();
+	    console.log("AHURR CURRENT TIMELINE", draggable.Controller);
+      if(current_timeline_element == undefined) {
+        draggable.Controller.delete();
+      }
       //If clip is dragged to a place where it doesn't belong -> send it back to where it once belonged
-			if(!Position.within(current_timeline_element, Event.pointerX(event), Event.pointerY(event))) {
+			else if(!Position.within(current_timeline_element, Event.pointerX(event), Event.pointerY(event))) {
   			draggable.previousPlace.appendChild(draggable.element);
 				draggable.element.setStyle({left: draggable.delta[0]+"px", top: draggable.delta[1]+"px"});
 			}
@@ -1257,7 +1287,32 @@ var LibraryClipController = Class.create(Controller, {
     $super(View, Model, parent);
     this.name = "LibraryController";
     var element = this.View.createElement(this);
-    element.update(this.Model.data.name);
+    element.update(
+      "[" + this.Model.data.type + "] " + 
+      "<b>" + this.Model.data.name + "</b><br /> " +
+          Model.data.dur_h + ":" + 
+          Model.data.dur_m + ":" +
+          Model.data.dur_s + ":" +
+          Model.data.dur_ms
+    );  
+    this.initEventHandlers();
+  },
+  initEventHandlers: function() {
+    this.View.element.observe('mousedown', this.mousedown.bindAsEventListener(this));
+  },
+  mousedown: function(event) {
+    if(Event.isLeftClick(event)) {
+      var clip = new Clip(this.Model.data.type, this.Model.data, this);
+      var dragElement = clip.Controller.View.element;
+          console.log(Draggables.drags);
+      for(i = 0; i < Draggables.drags.length; i++) {
+        if(Draggables.drags[i].element == dragElement) {
+          dragElement.setStyle({left: Event.pointerX(event) - 5, top: Event.pointerY(event) - 30});
+          Draggables.drags[i].initDrag(event);
+          break;
+        }
+      }
+    }
   }
 });
 
@@ -1267,9 +1322,10 @@ var LibraryClipView = Class.create(View, {
   createElement: function(Controller) {
     var element = new Element('div', {
       id: 'library_clip_' + Math.floor((Math.random() * 100000)),
-      className: 'library_clip'
+      className: 'library_clip_' + Controller.Model.data.type
     });
     Controller.getParent().View.element.appendChild(element);
+    Controller.registerElement(element);
     return element;
   }
 });
