@@ -1,4 +1,6 @@
 #!/usr/bin/ruby1.8
+
+#!/usr/local/bin/ruby
 #
 # You may specify the path to the FastCGI crash log (a log of unhandled
 # exceptions which forced the FastCGI instance to exit, great for debugging)

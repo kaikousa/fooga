@@ -1,0 +1,8 @@
+#video file path
+
+video_path: /home/lana/videos/
+audio_path: /home/lana/audio/
+
+#File info cmd
+
+ffmpeg_info: ffmpeg -i <filename_withext> 2>&1

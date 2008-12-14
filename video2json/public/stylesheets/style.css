@@ -1,0 +1,172 @@
+div.audiotimeline {
+  background-color: #f3f3f3;
+  height: 60px;
+}
+
+.videotimeline {
+  background-color: #e7e7e7;
+  height: 60px;
+}
+
+.timeline_wrapper {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  height: 60px;
+  swidth: 800px;
+  overflow: hidden;
+
+}
+
+.audioClip {
+  background-color: #4CDFFF;
+  font-size: 70%;
+  height: 60px;
+  position: absolute;
+  top: 0px;
+  cursor: pointer;
+}
+
+.videoClip {
+  background-color: #00A6CC;
+  font-size: 70%;
+  height: 60px;
+  position: absolute;
+  top: 0px;
+  cursor: pointer;
+}
+
+.videoClip_thumbnail {
+  float: left;
+  margin: 2px;
+  margin-left: 4px;
+  width: 40px;
+  height: 30px;
+}
+
+.leftHandle {
+  height: 60px;
+  width: 5px;
+  position: relative;
+  top: -23px;
+  background-color: black;
+  float: left;
+  cursor: e-resize;
+
+}
+.rightHandle {
+  height: 60px;
+  width: 5px;
+  position: relative;
+  top: -23px;
+  background-color: #949494;
+  float: right;
+  cursor: w-resize;
+}
+
+.videoClip p {
+  height: 10px;
+  margin-left: 7px;
+  margin-top: 2px;
+}
+.audioClip p {
+  height: 10px;
+  margin-left: 7px;
+  margin-top: 2px;
+}
+
+.zoomValue {
+  font-size: 10px;
+}
+
+.increment_button {
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.decrement_button {
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.zoom-widget_wrapper {
+  background-color: #E7E7E7;
+}
+
+div.timelineSlider-wrapper {
+  background-color: #E7E7E7;
+  height: 12px;
+  width: 250px;
+  position: relative;
+  left: 90px;
+  top: -15px;
+  padding-top: 5px;
+
+}
+div.timelineSlider-track {
+  background-color: #aaa;
+  height: 6px;
+  width: 240px;
+  margin-left: 5px;
+
+}
+div.timelineSlider-handle {
+  background-color: #32CCFE;
+  position: relative;
+  top: -1px;
+  height: 9px;
+}
+
+div.playheadwrapper {
+  clear: left;
+  height: 8px;
+  z-index: 10;
+}
+
+div.playheadtrack {
+  height:8px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+div.playhead {
+  width: 15px;
+  height: 8px;
+  margin-top: 0px;
+  background-image: url("images/playhead.gif");
+  background-repeat: no-repeat;
+  position: relative;
+  top: -8px;
+  left: -5px;
+}
+
+div.playhead_hover {
+  background-color: #32CCFE;
+  width: 1px;
+  position: relative;
+  top: -8px;
+  z-index: 100;
+}
+div.library_wrapper {
+  height: 300px;
+  width: 300px;
+  background-color: #F3F3F3;
+  overflow: auto;
+  list-style-position: outside;
+}
+
+div.library_clip_video {
+  height: 30px;
+  background-color: #00A6CC;
+  margin-bottom: 3px;
+  font-size: 10px;
+}
+
+div.library_clip_audio {
+  height: 30px;
+  background-color: #4CDFFF;
+  margin-bottom: 3px;
+  font-size: 10px;
+}
