@@ -80,14 +80,16 @@ div.audiotimeline {
 
 .increment_button {
   cursor: pointer;
-  padding-left: 5px;
-  padding-right: 5px;
+  background-image: url("images/volume_up.gif");
+  width: 15px;
+  height: 8px;
 }
 
 .decrement_button {
   cursor: pointer;
-  padding-left: 5px;
-  padding-right: 5px;
+  background-image: url("images/volume_down.gif");
+  width: 15px;
+  height: 8px;
 }
 .zoom-widget_wrapper {
   background-color: #E7E7E7;
@@ -98,8 +100,8 @@ div.timelineSlider-wrapper {
   height: 12px;
   width: 250px;
   position: relative;
-  left: 90px;
-  top: -15px;
+  left: 35px;
+  top: -21px;
   padding-top: 5px;
 
 }

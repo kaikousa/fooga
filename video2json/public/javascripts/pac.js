@@ -1047,8 +1047,8 @@ var ZoomSliderView = Class.create(View, {
   createElement: function(Controller) {
     
     var mainController = Controller.getMainController();
-    var increment_button = new Element('img', {className: 'increment_button', src: 'images/volume_up.gif'});
-    var decrement_button = new Element('img', {className: 'decrement_button', src: 'images/volume_down.gif'});
+    var decrement_button = new Element('div', {className: 'increment_button'});
+    var increment_button = new Element('div', {className: 'decrement_button'});
     var zoomValue = new Element('span', {className: 'zoomValue'});
     var element = new Element('span', {className: 'zoom-widget_wrapper'});
     

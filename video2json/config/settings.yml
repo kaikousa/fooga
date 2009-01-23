@@ -1,8 +1,18 @@
-#video file path
+#video file & audio file paths
 
-video_path: /home/lana/videos/
-audio_path: /home/lana/audio/
+video_path: /videos/
+audio_path: /audio/
+thumbs_path: /thumbs/
 
 #File info cmd
 
 ffmpeg_info: ffmpeg -i <filename_withext> 2>&1
+
+#Thumbnail generate cmd
+
+thumbnail_cmd: ffmpeg -i <filename_withext> -vcodec png -vframes 1 -ss 00:00:00.50 -an -f rawvideo -s <resolution_width>x<resolution_height> <filename_noext>.png 1> /dev/null 2>&1
+
+#Resolutions for thumbnails
+
+video_thumbnail_target_resolution_width: 96
+video_thumbnail_target_resolution_height: 72

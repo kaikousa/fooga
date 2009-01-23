@@ -24,17 +24,17 @@ console.time("Total init time: ");
 var library = {
   "media_library": 
     [
-    <% @media.each do |v| %>
+    <% @lib.each do |v| %>
         {
-        "playable_filename":"<%= v["playable_filename"] %>",
+        "playable_filename":"<%= v["playable_filename"] -%>",
         "thumbnail_image":"",
-        "name":"<%= v["name"] %>",
-        "type":"<%= v["type"] %>",
-        "dur_h":<%= v["dur_h"] %>,
-        "dur_m":<%= v["dur_m"] %>,
-        "dur_s":<%= v["dur_s"] %>,
-        "dur_ms":<%= v["dur_ms"] %>,
-        "filename":"<%= v["filename"] %>"
+        "name":"<%= v["name"] -%>",
+        "type":"<%= v["type"] -%>",
+        "dur_h":<%= v["dur_h"] -%>,
+        "dur_m":<%= v["dur_m"] -%>,
+        "dur_s":<%= v["dur_s"] -%>,
+        "dur_ms":<%= v["dur_ms"] -%>,
+        "filename":"<%= v["filename"] -%>"
         },
 <% end %>
     ]
