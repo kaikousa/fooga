@@ -5,7 +5,24 @@
 <title>Fooga Editor</title>
 <!--<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script> -->
 <%= stylesheet_link_tag("style") %>
-<%= javascript_include_tag("scriptaculous/prototype","scriptaculous/scriptaculous.js","timeHelper.js","pac.js") %>
+<%= javascript_include_tag("scriptaculous/prototype","scriptaculous/scriptaculous.js","timeHelper.js","pac.js","jquery.js","jquery.timers.js") %>
+<script type="text/javascript">
+  $j = jQuery.noConflict();
+  $j(document).ready(function(){
+/*$j(document).everyTime(5000, function(){
+	$j.ajax({
+        	type: "POST",
+		url: "list",
+		success: function(response){
+			var htmlCopy = $j(response).find(".library_wrapper").html();
+			$j(".library_wrapper").html(htmlCopy);
+		}
+
+        });
+}, 10);*/
+      
+      });
+</script>
 
 </head>
 
