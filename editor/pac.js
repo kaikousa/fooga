@@ -30,6 +30,7 @@ var View = Class.create({
 
 var Model = Class.create({
   initialize: function(data) {
+    this.children = [];
     if(data) {
       this.data = data;
     }
@@ -37,6 +38,42 @@ var Model = Class.create({
       this.data = {};
     }
   
+  },
+
+  //Method registerChild 
+  //args: agent:Object
+  //return: void
+  //description: used to register child-agents to this agent
+  registerChild: function(obj) {
+    //TODO What to do with this?
+    if(this.children == undefined) {
+      this.children = [];
+    }
+    if(obj.Controller){
+      this.children.push(obj.Controller);
+    }
+    else {
+      this.children.push(obj);
+    }
+  },
+  //Method unregisterChild 
+  //args: agent:Object
+  //return: void
+  //description: used to unregister the agent if the parent/child-relationship changes somehow 
+  unregisterChild: function(obj) {
+    if(obj.Controller){
+      this.children = this.children.without(obj.Controller);
+    }
+    else {
+      this.children = this.children.without(obj);
+    }
+  },
+  //Method getChildren 
+  //args: none
+  //return: Array
+  //description: returns an array of child-agents to this agent
+  getChildren: function() {
+    return this.children;
   },
 
   //------------------------------------------------//
@@ -140,7 +177,7 @@ var Controller = Class.create({
   //Method getParentByName
   //args: name:String
   //return: Object
-  //description: returns a parent Controller of the given name. Can be used by controllers who wish to use agents that are positioned in between this controller and the main controller in the hierarchy. Names are constructed as: AgentnameController eg: TimelineController
+  //description: returns a parent Controller of the given name. Can be used by controllers who wish to use agents that are positioned in between this controller and the main controller in the hierarchy. Names are constructed as: AgentnameController e.g: TimelineController
 
   getParentByName: function(name) {
     var parent = this.getParent();
@@ -280,9 +317,6 @@ var TimelineController = Class.create(Controller, {
     console.log(this.Model.data);
     for(i = 0; i < clips.length; i++) {
       var clip = new Clip(this.Model.data.type, clips[i], this);
-      with(this.getMainController()) {
-        zoomObserver.register(clip);
-      }
     }
   },
 
@@ -292,16 +326,16 @@ var TimelineController = Class.create(Controller, {
   //description: Initialize all the clip's event-handlers (onClick, others?)
 
   initEventHandlers: function() {
-    this.View.element.observe('click', this.clicky.bind(this));
+    this.View.element.observe('click', this.click.bind(this));
   },
 
   
   //------------------------------------------------//
-  //Method: clicky
+  //Method: click
   //return: void
   //description: Method ot be fired when an click event on the agent is fired.
-  clicky: function() {
-    console.log(this.getMainController().getTimelines('video'));
+  click: function() {
+    this.getMainController().collectEditorInstanceData();
   },
 
   //------------------------------------------------//
@@ -332,7 +366,7 @@ var Timeline = Class.create(Agent, {
     var p = new TimelineView();
     var a = new TimelineModel(type, json);
     this.Controller = new TimelineController(p, a, parent);
-    console.warn('Done!');
+    console.warn('Done creating ' + type + 'timeline!');
   },
 
   
@@ -355,6 +389,7 @@ var MainModel = Class.create(Model, {
     this.env = {};
     this.env.zoomLevel = 5.0;
     this.env.zoomValue = 5.0;
+  
   }
 });
 
@@ -393,20 +428,24 @@ var MainController = Class.create(Controller, {
     if(json.video_timelines) {
       for(i = 0; i < json.video_timelines.length; i++) {
         var timeline_data = json.video_timelines[i];
-        new Timeline("video", timeline_data, this);
+        var tl = new Timeline("video", timeline_data, this);
+        this.Model.registerChild(tl);
       }
     }
     else {
-        new Timeline("video", null, this);
+        var tl = new Timeline("video", null, this);
+        this.Model.registerChild(tl);
     }
     if(json.audio_timelines) {
       for(a = 0; a < json.audio_timelines.length; a++) {
         var timeline_data = json.audio_timelines[a];
-        new Timeline('audio', timeline_data, this);
+        var tl = new Timeline('audio', timeline_data, this);
+        this.Model.registerChild(tl);
       }
     }
     else {
-        new Timeline("audio", null, this);
+        var tl = new Timeline("audio", null, this);
+        this.Model.registerChild(tl);
     }
   },
 
@@ -450,7 +489,27 @@ var MainController = Class.create(Controller, {
     else {
       return this.getElement().select('.' + type + 'timeline');
     }
-  } 
+  },
+
+  collectEditorInstanceData: function() {
+    var timelines = this.Model.getChildren();
+    var data = {};
+    data.videotimelines = [];
+    data.audiotimelines = [];
+    timelines.each(function(timeline) {
+      var clips = timeline.Model.getChildren();
+      var clipDataArr = [];
+      clips.each(function(clip) {clipDataArr.push(clip.Model.data)});
+      if(timeline.Model.get("type") == "video") {
+        data.videotimelines.push(clipDataArr);
+      }
+      else if(timeline.Model.get("type") == "audio") {
+        data.audiotimelines.push(clipDataArr);
+      }
+    }); 
+    //console.log(Object.toJSON(data));
+    console.log(data);
+  }
 
 });
 
@@ -481,6 +540,7 @@ var Fooga = Class.create(Agent, {
   launch: function() {
     console.warn("Launching Fooga...");
     this.Controller.zoomObserver = new ZoomObserver();
+    //this.Controller.clipObserver = new Observer();
     Draggables.addObserver(new DragObserver("clipobserver", this.Controller));
     this.Controller.createTimelines();
     this.Controller.zoomSlider = new ZoomSlider(this.Controller);
@@ -505,56 +565,63 @@ var ClipModel = Class.create(Model, {
   initialize: function($super, type, data) {
     $super(data);
     this.data.type = type;
-    with(data) {
-      this.data.dur_h = dur_h;
-      this.data.dur_m = dur_m;
-      this.data.dur_s = dur_s;
-      this.data.dur_ms = dur_ms;
+    this.data.dur_h = data.dur_h;
+    this.data.dur_m = data.dur_m;
+    this.data.dur_s = data.dur_s;
+    this.data.dur_ms = data.dur_ms;
 
-      this.data.in_h = in_h;
-      this.data.in_m = in_m;
-      this.data.in_s = in_s;
+    if(data.in_h != undefined) {
+      this.data.in_h = data.in_h;
+      this.data.in_m = data.in_m;
+      this.data.in_s = data.in_s;
+      this.data.in_ms = data.in_ms;
 
-      this.data.out_h = out_h;
-      this.data.out_m = out_m;
-      this.data.out_s = out_s;
+      this.data.out_h = data.out_h;
+      this.data.out_m = data.out_m;
+      this.data.out_s = data.out_s;
+      this.data.out_ms = data.out_ms;
+    }
+    else {
+      this.data.in_h = 0;
+      this.data.in_m = 0;
+      this.data.in_s = 0;
+      this.data.in_ms = 0;
+
+      this.data.out_h = data.dur_h;
+      this.data.out_m = data.dur_m;
+      this.data.out_s = data.dur_s;
+      this.data.out_ms = data.dur_ms;
+    }
+    
+    this.data.duration = FoogaUtils.TimeHelper.timeToMilliseconds(
+      data.dur_h, 
+      data.dur_m,
+      data.dur_s, 
+      data.dur_ms);
+
+    if(data.type == "audio" || data.type == "video" && data.in_h != undefined) {
+      this.data.offset_h = data.offset_h;
+      this.data.offset_m = data.offset_m;
+      this.data.offset_s = data.offset_s;
+      this.data.offset_ms = data.offset_ms;
+
+      this.data.offset = FoogaUtils.TimeHelper.timeToMilliseconds(
+        data.offset_h, 
+        data.offset_m, 
+        data.offset_s, 
+        data.offset_ms);
       
-      this.data.duration = FoogaUtils.TimeHelper.timeToMilliseconds(dur_h, dur_m, dur_s, dur_ms);
+      this.data.inpoint = FoogaUtils.TimeHelper.timeToMilliseconds(
+        data.in_h, 
+        data.in_m, 
+        data.in_s, 
+        data.in_ms);
 
-      if(type == "audio" || type == "video") {
-
-        this.data.in_ms = in_ms;
-
-        this.data.out_ms = out_ms;
-
-        this.data.offset_h = offset_h;
-        this.data.offset_m = offset_m;
-        this.data.offset_s = offset_s;
-        this.data.offset_ms = offset_ms;
-
-        this.data.offset = FoogaUtils.TimeHelper.timeToMilliseconds(offset_h, offset_m, offset_s, offset_ms);
-        this.data.inpoint = FoogaUtils.TimeHelper.timeToMilliseconds(in_h, in_m, in_s, in_ms);
-        this.data.outpoint = FoogaUtils.TimeHelper.timeToMilliseconds(out_h, out_m, out_s, out_ms);
-      }
-      /*else if(type == "video") {
-        this.data.in_f = in_f;
-        this.data.out_f = out_f;
-        this.data.place = place;
-
-        
-        this.data.fps = FoogaUtils.settings.fps;
-
-        var offset = FoogaUtils.TimeHelper.millisecondsToTimeWithFps(place * 1000, fps);
-        this.data.offset_h = offset.h;
-        this.data.offset_m = offset.m;
-        this.data.offset_s = offset.s;
-        this.data.offset_f = offset.f;
-        this.data.offset = FoogaUtils.TimeHelper.timeToMillisecondsWithFps(this.data.offset_h, this.data.offset_m, this.data.offset_s, this.data.offset_f, this.data.fps);
-
-        this.data.inpoint = FoogaUtils.TimeHelper.timeToMillisecondsWithFps(in_h, in_m, in_s, in_f, fps);
-        this.data.outpoint = FoogaUtils.TimeHelper.timeToMillisecondsWithFps(out_h, out_m, out_s, out_f, fps);
-
-      }*/
+      this.data.outpoint = FoogaUtils.TimeHelper.timeToMilliseconds(
+        data.out_h, 
+        data.out_m, 
+        data.out_s, 
+        data.out_ms);
     }
   }
 
@@ -600,8 +667,12 @@ var ClipView = Class.create(View, {
 
     element.setStyle({width: Controller.getWidthInPx() + "px"});
     Controller.registerElement(element);
-    Controller.getParentByName('TimelineController').getElement().appendChild(element);
-
+    if(Controller.getParentByName('TimelineController') != undefined){
+      Controller.getParentByName('TimelineController').getElement().appendChild(element);
+    }
+    else {
+      document.body.appendChild(element);
+    }
   },
 
   drawTrim: function(screenX, direction, duration, inpoint, outpoint, zoomLevel) {
@@ -660,12 +731,37 @@ var ClipController = Class.create(Controller, {
     this.View.createElement(this);
     this.setAsDraggable();
     this.initEventHandlers();
-    var zoomLevel = this.getMainController().getZoomLevel();
-    this.setStartpoint(this.getPxOffset(zoomLevel), zoomLevel, this.getParent().getScrollLeft());
+    var mainController = this.getMainController();
+    mainController.zoomObserver.register(this);
+    var zoomLevel = mainController.getZoomLevel();
+    if(this.getParentByName('TimelineController') != undefined){
+      this.setStartpoint(this.getPxOffset(zoomLevel), zoomLevel, this.getParent().getScrollLeft());
+      this.getParent().Model.registerChild(this);
+    }
+  },
+    
+  update: function() {
+    if(this.Model.previousPlace != document.body) {
+      this.Model.previousPlace.Controller.Model.unregisterChild(this);  
+      this.getParent().Model.registerChild(this);  
+    }
+    else {
+      this.getParent().Model.registerChild(this);  
+    }
+  },
+
+  delete: function() {
+    this.Model.draggable.destroy();
+    this.getElement().stopObserving();
+    this.getElement().down().next('.rightHandle').stopObserving();
+    this.getElement().down().next('.leftHandle').stopObserving();
+    this.View.element.remove();
+    this.getParent().Model.unregisterChild(this);
+
   },
 
   setAsDraggable: function() {
-    new FoogaDraggable(this.View.element, {}, this);
+    this.Model.draggable = new FoogaDraggable(this.View.element, {}, this);
   },
 
   draw: function() {
@@ -708,6 +804,10 @@ var ClipController = Class.create(Controller, {
 	
   },
 
+  removeEventHandlers: function() {
+    var element = this.getElement();
+    element.stopObserving();
+  },
 
   initEventHandlers: function() {
     var element = this.getElement();
@@ -735,7 +835,7 @@ var ClipController = Class.create(Controller, {
   },
 
   clicky: function(event) {
-    console.log(this.Model)
+    console.log(this.Model.data)
     Event.stop(event);
   },
 
@@ -821,14 +921,22 @@ var Observer = Class.create({
       this.subjects.push(obj);
     }
   },
-  //TODO Finish this
   unregister: function(obj) {
-    for(i = 0; i < this.subjects.length; i++) {
-      if(this.subjects[i] === obj) {
-
-        }
+    if(obj.Controller){
+      this.subjects = this.subjects.without(obj.Controller);
     }
-
+    else {
+      this.subjects = this.subjects.without(obj);
+    }
+  },
+  get: function(type) {
+    if(type == "data") {
+      var data = [];
+      for(i = 0; i < this.subjects.length; i++) {
+        data.push(this.subjects[i].Model.data);
+      }
+      return data;
+    }
   }
 });
 //---------------
@@ -867,8 +975,7 @@ var DragObserver = Class.create({
   onStart: function(eventName, draggable, event) {
     console.log("onStart");
     if(draggable.element.className == 'audioClip' || draggable.element.className == 'videoClip') {
-		  //document.getElementsByTagName('body')[0].appendChild(draggable.element);
-	    draggable.previousPlace = draggable.element.parentNode;
+	    draggable.Controller.Model.previousPlace = draggable.element.parentNode;
 		  document.body.appendChild(draggable.element);
     }
     else if(draggable.element.className == 'playhead') {
@@ -877,11 +984,16 @@ var DragObserver = Class.create({
 
   onEnd: function(eventName, draggable, event) {
 	  console.log("onEnd");
+	  console.log(this.parent);
     if(draggable.element.className == 'audioClip' || draggable.element.className == 'videoClip') {
       var current_timeline_element = draggable.Controller.getCurrentTimeline();
+	    console.log("AHURR CURRENT TIMELINE", draggable.Controller);
+      if(current_timeline_element == undefined) {
+        draggable.Controller.delete();
+      }
       //If clip is dragged to a place where it doesn't belong -> send it back to where it once belonged
-			if(!Position.within(current_timeline_element, Event.pointerX(event), Event.pointerY(event))) {
-  			draggable.previousPlace.appendChild(draggable.element);
+			else if(!Position.within(current_timeline_element, Event.pointerX(event), Event.pointerY(event))) {
+  			draggable.Controller.Model.previousPlace.appendChild(draggable.element);
 				draggable.element.setStyle({left: draggable.delta[0]+"px", top: draggable.delta[1]+"px"});
 			}
       else {
@@ -895,6 +1007,7 @@ var DragObserver = Class.create({
         current_timeline_element.appendChild(draggable.element);
         draggable.Controller.setStartpoint(pos, zoomLevel, current_timeline_element_offset);
         draggable.Controller.setParent(current_timeline_element.Controller);
+        draggable.Controller.update();
         mainController.timelineSlider.Controller.resizeHandle();
       }
 		}
@@ -1214,7 +1327,7 @@ var LibraryController = Class.create(Controller, {
     if(!Model.data.media_library) return;
     var data = Model.data.media_library;
     for(i = 0; i < data.length; i++) {
-      new LibraryCLip(data[i].type, data[i], this);
+      new LibraryClip(data[i].type, data[i], this);
     }
   }
 });
@@ -1248,7 +1361,7 @@ var Library = Class.create(Agent, {
     var p = new LibraryView();
     var a = new LibraryModel(json);
     this.Controller = new LibraryController(p, a, parent);
-    console.warn('Done!');
+    console.warn('Done creating library!');
   }
 });
 
@@ -1257,10 +1370,39 @@ var LibraryClipController = Class.create(Controller, {
     $super(View, Model, parent);
     this.name = "LibraryController";
     var element = this.View.createElement(this);
-    element.update(this.Model.data.name + "<br />" + 
-      this.Model.data.type + "clip " + 
-      FoogaUtils.TimeHelper.timeToString(this.Model.data.dur_h, this.Model.data.dur_m, this.Model.data.dur_s, this.Model.data.dur_ms)
-    );
+    element.update(
+      "[" + this.Model.data.type + "] " + 
+      "<b>" + this.Model.data.name + "</b><br /> " +
+      FoogaUtils.TimeHelper.millisecondsToTime(
+        FoogaUtils.TimeHelper.timeToMilliseconds(
+          Model.data.dur_h, 
+          Model.data.dur_m, 
+          Model.data.dur_s, 
+          Model.data.dur_ms), 
+          "True"
+      )
+    );  
+    this.initEventHandlers();
+  },
+  initEventHandlers: function() {
+    this.View.element.observe('mousedown', this.mousedown.bindAsEventListener(this));
+  },
+  mousedown: function(event) {
+    if(Event.isLeftClick(event)) {
+      var clip = new Clip(this.Model.data.type, this.Model.data, this);
+      var dragElement = clip.Controller.View.element;
+          console.log(Draggables.drags);
+      for(i = 0; i < Draggables.drags.length; i++) {
+        if(Draggables.drags[i].element == dragElement) {
+          dragElement.setStyle({
+                                left: Event.pointerX(event) - 5, 
+                                top: Event.pointerY(event) - 30
+                               });
+          Draggables.drags[i].initDrag(event);
+          break;
+        }
+      }
+    }
   }
 });
 
@@ -1268,12 +1410,12 @@ var LibraryClipView = Class.create(View, {
   initialize: function() {
   },
   createElement: function(Controller) {
-    var Model = Controller.Model;
     var element = new Element('div', {
       id: 'library_clip_' + Math.floor((Math.random() * 100000)),
-      className: 'library_clip_' + Model.data.type
+      className: 'library_clip_' + Controller.Model.data.type
     });
     Controller.getParent().View.element.appendChild(element);
+    Controller.registerElement(element);
     return element;
   }
 });
@@ -1284,12 +1426,12 @@ var LibraryClipModel = Class.create(Model, {
   }
 });
 
-var LibraryCLip = Class.create(Agent, {
+var LibraryClip = Class.create(Agent, {
   initialize: function(type, json, parent) {
     console.warn('Creating libraryclip...');
     var p = new LibraryClipView();
     var a = new LibraryClipModel(json);
     this.Controller = new LibraryClipController(p, a, parent);
-    console.warn('Done!');
+    console.warn('Done creating libraryclip!');
   }
 });

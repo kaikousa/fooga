@@ -162,8 +162,6 @@ div.library_clip_video {
   background-color: #00A6CC;
   margin-bottom: 3px;
   font-size: 10px;
-  border-bottom: 1px solid black;
-  padding-left: 5px;
 }
 
 div.library_clip_audio {
@@ -171,6 +169,4 @@ div.library_clip_audio {
   background-color: #4CDFFF;
   margin-bottom: 3px;
   font-size: 10px;
-  border-bottom: 1px solid black;
-  padding-left: 5px;
 }

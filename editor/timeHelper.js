@@ -67,11 +67,7 @@ FoogaUtils.TimeHelper = {
       }
     }
     return number;
-  },
-
-  timeToString: function(h, m, s, ms) {
-    return h + ":" + m + ":" + s + ":" + ms;
-  } 
+  }
 };
 
 FoogaUtils.TrimManager = {
@@ -120,21 +116,39 @@ FoogaUtils.TrimManager = {
       var change_ms = FoogaUtils.TimeHelper.pixelsToMilliseconds(change, zoomLevel);
       if(outpoint + change_ms <= 0) {
         clip.Model.set('outpoint', 0);
+        clip.Model.set('out_h', 0);
+        clip.Model.set('out_m', 0);
+        clip.Model.set('out_s', 0);
+        clip.Model.set('out_ms', 0);
       }
       else {
+        var time = FoogaUtils.TimeHelper.millisecondsToTime(outpoint + change_ms);
         clip.Model.set('outpoint', outpoint + change_ms);
+        clip.Model.set('out_h', time.h);
+        clip.Model.set('out_m', time.m);
+        clip.Model.set('out_s', time.s);
+        clip.Model.set('out_ms', time.ms);
         FoogaUtils.playerNotifier.notify('out', outpoint + change_ms);
       }
       
     }
     else if(direction == 'in') {
       var change_ms = FoogaUtils.TimeHelper.pixelsToMilliseconds(change, zoomLevel);
+      var time = FoogaUtils.TimeHelper.millisecondsToTime(inpoint + change_ms);
       if(inpoint + change_ms >= 1) {
         clip.Model.set('inpoint', inpoint + change_ms);
+        clip.Model.set('in_h', time.h);
+        clip.Model.set('in_m', time.m);
+        clip.Model.set('in_s', time.s);
+        clip.Model.set('in_ms', time.ms);
         FoogaUtils.playerNotifier.notify('in', outpoint + change_ms);
       }
       else {
         clip.Model.set('inpoint', 0);
+        clip.Model.set('in_h', 0);
+        clip.Model.set('in_m', 0);
+        clip.Model.set('in_s', 0);
+        clip.Model.set('in_ms', 0);
         FoogaUtils.playerNotifier.notify('in', 0);
       }      
     }
@@ -144,11 +158,11 @@ FoogaUtils.TrimManager = {
 
 FoogaUtils.playerNotifier = {
   notify: function(direction, ms) {
-    console.log("Notified player: ", direction, ms);
+    //console.log("Notified player: ", direction, ms);
   },
 
   end: function(direction, ms) {
-    console.log("Ended notifying player: ", direction, ms);
+    //console.log("Ended notifying player: ", direction, ms);
   }
 
 };
