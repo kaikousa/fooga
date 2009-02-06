@@ -85,7 +85,7 @@ FoogaUtils.TrimManager = {
   end: function() {
     if(this.trimming) {
       this.trimming = false;
-      console.log("Ended trimming");
+      //console.log("Ended trimming");
       var clip = this.activeTrim[0];
       var event = this.activeTrim[1];
       var direction = this.activeTrim[2];
