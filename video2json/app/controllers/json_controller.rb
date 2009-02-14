@@ -11,6 +11,7 @@ class JsonController < ApplicationController
     if ! File.exist?("#{RAILS_ROOT}/audio")
                     File.makedirs ("#{RAILS_ROOT}/audio")
     end
+    list
   end
 
   def list

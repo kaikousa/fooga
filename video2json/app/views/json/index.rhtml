@@ -1,10 +1,205 @@
 <html>
-  <head>
-    <title>
-      Testi
-    </title>
-  </head>
-  <body>
-    <%= button_to "List" , :action => "list" %>
-  </body>
+
+<head>
+
+<title>Fooga Editor</title>
+<!--<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script> -->
+<%= stylesheet_link_tag("style") %>
+<%= javascript_include_tag("scriptaculous/prototype","scriptaculous/scriptaculous.js","timeHelper.js","pac.js","jquery.js","jquery.timers.js") %>
+<script type="text/javascript">
+  $j = jQuery.noConflict();
+  $j(document).ready(function(){
+/*$j(document).everyTime(5000, function(){
+	$j.ajax({
+        	type: "POST",
+		url: "list",
+		success: function(response){
+			var htmlCopy = $j(response).find(".library_wrapper").html();
+			$j(".library_wrapper").html(htmlCopy);
+		}
+
+        });
+}, 10);*/
+      
+      });
+</script>
+
+</head>
+
+<body>
+<div id="container" style=""></div>
+<div id="container2" style=""></div>
+
+
+</body>
+
+<script type="text/javascript">
+//Start timing. Timing ends at the end of Fooga.launch();
+console.time("Total init time: ");
+
+
+var library = {
+  "media_library": 
+    [
+    <% @lib.each do |v| %>
+        {
+        "playable_filename":"<%= v["playable_filename"] -%>",
+        "thumbnail_image":"",
+        "name":"<%= v["name"] -%>",
+        "type":"<%= v["type"] -%>",
+        "dur_h":<%= v["dur_h"] -%>,
+        "dur_m":<%= v["dur_m"] -%>,
+        "dur_s":<%= v["dur_s"] -%>,
+        "dur_ms":<%= v["dur_ms"] -%>,
+        "filename":"<%= v["filename"] -%>"
+        },
+<% end %>
+    ]
+};
+var json = {
+
+
+  "video_timelines":
+    [
+      [
+        {
+        "playable_filename":"userdata/leffa.flv",
+        "thumbnail_image":"userdata/thumb.jpg",
+        "name":"elokuva1.flv",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":20,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":1,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/leffa.avi"
+        }
+      ]
+    ],
+  "audio_timelines":
+    [
+      [
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"heavy.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":7,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":1,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        },
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"lastenlaulu.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":12,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":13,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        }
+      ],
+      [
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"slovari.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":10,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":3,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        },
+        {
+        "playable_filename":"userdata/biisi.mp3",
+        "name":"rokki.mp3",
+        "id":"clip",
+        "in_h":0,
+        "in_m":0,
+        "in_s":0,
+        "in_ms":0,
+        "out_h":0,
+        "out_m":0,
+        "out_s":10,
+        "out_ms":0,
+        "offset_h":0,
+        "offset_m":0,
+        "offset_s":23,
+        "offset_ms":0,
+        "dur_h":0,
+        "dur_m":1,
+        "dur_s":13,
+        "dur_ms":0,
+        "audio_id":0,
+        "clipStart":0,
+        "filename":"userdata/biisi.mp3"
+        }
+      ]
+    ]
+  }
+
+var data = {"timelines": json, "library": library};
+var player = {player: "Player"};
+var fooga = new Fooga($('container'), new MainController(new MainView(), new MainModel(data, player), null));
+fooga.launch();
+
+//var fooga2 = new Fooga($('container2'), new MainController(new MainView, new MainModel(json), null));
+//fooga2.launch();
+</script>
 </html>
