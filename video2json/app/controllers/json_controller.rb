@@ -1,5 +1,6 @@
 class JsonController < ApplicationController
   require 'json'
+  require 'ftools'
 
   attr_accessor :lib
 
