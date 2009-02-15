@@ -65,3 +65,7 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
 end
+
+#Install Video Editing Engine
+settings = YAML::load( File.open( "#{RAILS_ROOT}/config/settings.yml" ) )
+$: << settings['vee_lib_path']
