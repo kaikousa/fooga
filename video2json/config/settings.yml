@@ -18,4 +18,4 @@ video_thumbnail_target_resolution_width: 96
 video_thumbnail_target_resolution_height: 72
 
 #Path to Video Editing Engine -installation
-vee_lib_path: /home/kaitsu/projects/vee/video-editing-engine/lib
+vee_lib_path: 
