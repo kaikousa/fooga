@@ -31039,3 +31039,15 @@ Processing JsonController#test_vee (for 127.0.0.1 at 2009-02-15 17:58:36) [GET]
   [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
 Rendering json/test_vee
 Completed in 3ms (View: 1, DB: 0) | 200 OK [http://localhost/json/test_vee]
+
+
+Processing JsonController#test_vee (for 127.0.0.1 at 2009-02-15 18:26:14) [GET]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+Rendering json/test_vee
+Completed in 4ms (View: 1, DB: 0) | 200 OK [http://localhost/json/test_vee]
+
+
+Processing JsonController#test_vee (for 127.0.0.1 at 2009-02-15 19:12:16) [GET]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+Rendering json/test_vee
+Completed in 4ms (View: 2, DB: 0) | 200 OK [http://localhost/json/test_vee]
