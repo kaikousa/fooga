@@ -18,4 +18,5 @@ video_thumbnail_target_resolution_width: 96
 video_thumbnail_target_resolution_height: 72
 
 #Path to Video Editing Engine -installation
+#NOTE! This path must be absolute
 vee_lib_path: 
