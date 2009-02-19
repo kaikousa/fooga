@@ -21,6 +21,15 @@ class JsonController < ApplicationController
     @lib = data.list
   end
   
+  def render_movie
+    movie_data = params[:post]["movie"]
+    task = Task.new
+    task.name = "Created in Rails"
+    task.data = movie_data
+    task.status = true
+    task.save
+  end
+  
   def test_vee
     @audio = Audio.new("ghosts.mp3", "", "", "", [])
   end
